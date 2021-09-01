@@ -1,4 +1,5 @@
-# Public
+#What Drives the Consumption of Ready-to-serve Food Categories? An analysis of Household Income, Household Wealth, and Work Hours in Business Cycles.
+
 There are a handful of food related categories in the IRI dataset (Cold Cereal, Frozen Dinners/Entrees, Frozen Pizza, Hotdog, Margarine/Butter, Mayonnaise, Mustard & Ketchup, Peanut Butter, Salty Snacks, Soup, Spaghetti/Italian Sauce, Sugar Substitutes, Yogurt). Some of them are ready-to-serve food categories, such as Frozen Dinners/Entrees, Frozen Pizza, Hotdog, or Soup. Others are more of cooking ingredients, such as Spaghetti/ Italian Sauce, Margarine/Butter, Mayonnaise, Mustard & Ketchup. 
 
 Due to the difference in how items of these categories are used, households with heterogeneous characteristics (Work Hours, Income, Family Size, Marital Status, Age, Education level, Occupation) might favor one group of items over others. In this research project, I would like to investigate the relationship between household income and household wealth and the consumption of various food related categories in the IRI Marketing database. 
