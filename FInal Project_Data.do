@@ -1,7 +1,7 @@
 
 ********************************************************
-*** Final Project 									 *** 
-*** Tai Nguyen -- August 2021 						 *** 
+*** Final Project 				     *** 
+*** Tai Nguyen -- August 2021 			     *** 
 *** PREDOC Summer Course in Social Science Analytics *** 
 ********************************************************
 
@@ -25,9 +25,9 @@ capture mkdir "$output/FinalProject"
 
 global files coldcer yogurt fzpizza saltsnck soup spagsauc fzdinent sugarsub peanbutr mustketc margbutr mayo hotdog 
 
-**************************************************************************************
-*Data Programming *** Append Data from Groceries Stores, Drug Stores, and Mass Stores*
-**************************************************************************************
+**********************************************************************************************************
+** Data Programming *** Append Household Panel Data from Groceries Stores, Drug Stores, and Mass Stores **
+**********************************************************************************************************
 
 /*For years 2004 - 2007*/
 
@@ -46,6 +46,7 @@ forvalues k=4(1)7 {
 		save $datain/FinalProject/``i''_PANEL_DR_`weeks`k''.dta, replace
 
 /*----------------------------------------------------------------------------*/
+
 		import delimited $rawdata/y`k'/``i''_PANEL_GR_`weeks`k''.dat, delimiter(whitespace, collapse) case(preserve) colrange(:11) clear
 		drop v8
 
@@ -67,43 +68,44 @@ local weeks11 "1635_1686"
 local weeks12 "1687_1739"
 
 forvalues k=8(1)12 {
-tokenize $files
-forvalues i=1/13 {
-/*Import household panel data*/
-import delimited $rawdata/y`k'/``i''_PANEL_DK_`weeks`k''.dat, case(preserve) colrange(:11) clear
+	tokenize $files
+	forvalues i=1/13 {
 
-save $datain/FinalProject/``i''_PANEL_DK_`weeks`k''.dta, replace
+	/*Import household panel data*/
+	import delimited $rawdata/y`k'/``i''_PANEL_DK_`weeks`k''.dat, case(preserve) colrange(:11) clear
+
+	save $datain/FinalProject/``i''_PANEL_DK_`weeks`k''.dta, replace
 
 /*----------------------------------------------------------------------------*/
 
-import delimited $rawdata/y`k'/``i''_PANEL_GK_`weeks`k''.dat, case(preserve) colrange(:11) clear
+	import delimited $rawdata/y`k'/``i''_PANEL_GK_`weeks`k''.dat, case(preserve) colrange(:11) clear
 
 
-save $datain/FinalProject/``i''_PANEL_GK_`weeks`k''.dta, replace
+	save $datain/FinalProject/``i''_PANEL_GK_`weeks`k''.dta, replace
 
-append using $datain/FinalProject/``i''_PANEL_DK_`weeks`k''.dta
+	append using $datain/FinalProject/``i''_PANEL_DK_`weeks`k''.dta
 
-save $datain/FinalProject/appended_``i''_PANEL_`weeks`k''.dta, replace
-}
+	save $datain/FinalProject/appended_``i''_PANEL_`weeks`k''.dta, replace
+	}
 }
 
 
 *************************************
-** Import the demographics files   **
+** Import demographics files  	   **
 *************************************
 
 forvalues k=4(1)7{
-import delimited $rawdata/Demo/demo`k'.csv, clear
-rename panelistid PANID
-rename year YEAR
-save $datain/FinalProject/DEMOS_`k'.dta, replace
+	import delimited $rawdata/Demo/demo`k'.csv, clear
+	rename panelistid PANID
+	rename year YEAR
+	save $datain/FinalProject/DEMOS_`k'.dta, replace
 }
 
 forvalues k=8(1)12{
-import delimited $rawdata/Demo/demo`k'.csv, clear
-rename panelistid PANID
-gen YEAR = `k'
-save $datain/FinalProject/DEMOS_`k'.dta, replace
+	import delimited $rawdata/Demo/demo`k'.csv, clear
+	rename panelistid PANID
+	gen YEAR = `k'
+	save $datain/FinalProject/DEMOS_`k'.dta, replace
 }
 
 ************************************************************
@@ -211,9 +213,9 @@ forvalues k=4(1)7 {
 	}
 }
 		
-******************************************************************
-** Generate dummy variables and collapse data into monthly data **
-******************************************************************
+******************************
+** Generate dummy variables **
+******************************
 		
 local weeks4 	"1270_1321" 
 local weeks5 	"1322_1373" 
@@ -323,9 +325,11 @@ forvalues k=4(1)7 {
 		save ``i''_`k', replace
 	}
 }
+
 ****************************************************************************
 ***Data programming***Merge household panel dataset with Week Translation***
 ****************************************************************************
+
 						***********************
 						*For years 2008 - 2012*
 						***********************
@@ -364,9 +368,9 @@ forvalues k=8(1)12 {
 	}
 }
 
-******************************************************************
-** Generate dummy variables and collapse data into monthly data **
-******************************************************************
+******************************
+** Generate dummy variables **
+******************************
 
 local weeks8 	"1479_1530" 
 local weeks9 	"1531_1582" 
@@ -461,14 +465,14 @@ forvalues k=8(1)12 {
 		*working hours status*
 		gen fulltime_w 	    = (femaleworkinghourcode == 2)  
 		gen home_stu_w		= (femaleworkinghourcode == 3)
-	    gen less_ft_w 		= (femaleworkinghourcode == 1)  
+	    	gen less_ft_w 		= (femaleworkinghourcode == 1)  
 		gen other_w 		= (femaleworkinghourcode == 99)  
 		
 		gen no_hh_w 		= (femaleworkinghourcode == 4)
 
 		gen fulltime_m 		= (maleworkinghourcode == 2)  
 		gen home_stu_m 		= (maleworkinghourcode == 3)
-	    gen less_ft_m 		= (maleworkinghourcode == 1)  
+	    	gen less_ft_m 		= (maleworkinghourcode == 1)  
 		gen other_m 		= (maleworkinghourcode == 99)
 		
 		gen no_hh_m 		= (maleworkinghourcode == 4)
@@ -508,9 +512,9 @@ forvalues j=1/13 {
 	file close ``j''_file
 	save $dataout/FinalProject/raw/``j''.dta, replace
 }
-***************************************************
-** Appending all raw data sets together 		 **
-***************************************************
+******************************************
+** Appending all raw data sets together **
+******************************************
 cd $dataout/FinalProject/raw
 
 	clear *
@@ -598,7 +602,7 @@ bysort PANID year month: gen id1 = _n
 bysort PANID year month: egen hhmpur = sum(DOLLARS)
 
 ****************************************************
-*Data Programming *** Filter Households 		   *
+*Data Programming *** Filter Households            *
 ****************************************************
 
 global files coldcer yogurt fzpizza saltsnck soup spagsauc fzdinent sugarsub peanbutr mustketc margbutr mayo hotdog 
@@ -810,7 +814,7 @@ global files coldcer yogurt fzpizza saltsnck soup spagsauc fzdinent sugarsub pea
 
 tokenize $files
 
-forvalues i= 4/4 {
+forvalues i= 1/13 {
 	use $dataout/FinalProject/``i''hvf.dta, clear
 	
 	gen yrmonth = ym(year, month) 
@@ -870,7 +874,7 @@ forvalues i= 4/4 {
 
 tokenize $files
 
-forvalues i= 4/4 {
+forvalues i= 1/13 {
 	use $dataout/FinalProject/``i''hvf.dta, clear
 	
 	gen yrmonth = ym(year, month) 
@@ -902,7 +906,7 @@ forvalues i= 4/4 {
 
 tokenize $files
 
-forvalues i= 3/3 {
+forvalues i= 1/13 {
 	use $dataout/FinalProject/``i''hvf.dta, clear
 	
 	gen yrmonth = ym(year, month) 
@@ -1028,58 +1032,6 @@ reg log_hhmpur top_third bottom_third log_hv `controls' `fixed_effects', r
 outreg2 using first_basic, append 
 }
 
-******************************************************************************************
-*First Analysis *** Income and Weath Effects between 2008 - 2012 *** by income tercile ***
-******************************************************************************************	
-/*
-global files coldcer yogurt fzpizza saltsnck soup spagsauc fzdinent sugarsub peanbutr mustketc margbutr mayo hotdog 
-
-use $dataout/FinalProject/coldcerhvfinc.dta, clear
-
-gen recession = (yrmonth >=ym(2007,12) & yrmonth < ym (2009,7))
-
-gen log_hhmpur = log(adj_ave_mpur)
-gen log_hv = log(hv_)
-
-*******************************
-
-local controls "less_54_m less_54_w more_55_m more_55_w hsgrad_m hsgrad_w some_coll_m some_coll_w collgrad_m collgrad_w postgrad_m postgrad_w mana_admin_m sales_m cler_m crafts_m oper_m laborer_m serv_priv_m other_prof_m mana_admin_w sales_w cler_w crafts_w oper_w laborer_w serv_priv_w other_prof_w"
-
-cap encode city, gen(city1)
-cap encode statename, gen (state1)
-
-local fixed_effects "i.state1 i.month i.year"
-
-cd $output/FinalProject
-reg log_hhmpur i.top_third##c.log_hv i.mid_third##c.log_hv `controls' `fixed_effects', r
-outreg2 using hv_inc, replace 
-
-*---*
-tokenize $files
-
-forvalues i=7/7{
-	use $dataout/FinalProject/``i''hvfinc.dta, clear
-
-	gen recession = (yrmonth >=ym(2007,12) & yrmonth < ym (2009,7))
-
-	gen log_hhmpur = log(adj_ave_mpur)
-	gen log_hv = log(hv_)
-
-local controls "less_54_m less_54_w more_55_m more_55_w hsgrad_m hsgrad_w some_coll_m some_coll_w collgrad_m collgrad_w postgrad_m postgrad_w mana_admin_m sales_m cler_m crafts_m oper_m laborer_m serv_priv_m other_prof_m mana_admin_w sales_w cler_w crafts_w oper_w laborer_w serv_priv_w other_prof_w "
-
-cap encode city, gen(city1)
-cap encode statename, gen (state1)
-
-local fixed_effects "i.state1 i.month i.year"
-
-
-cd $output/FinalProject
-reg log_hhmpur i.top_third##c.log_hv i.mid_third##c.log_hv `controls' `fixed_effects', r
-outreg2 using hv_inc, append 
-}
-*/
-
-
 ***********************************************************************
 *First Analysis***Income and Weath Effects between 2008 - 2012 _ trips*
 ***********************************************************************
@@ -1126,36 +1078,34 @@ tokenize $files
 forvalues i=2/8{
 	use $dataout/FinalProject/filtered_panel_trips_``i''.dta, clear
 
-bysort PANID year month: egen hhmtrips = sum(hh_trips)
-bysort PANID year month: egen hhmpur   = sum(hh_wpur)
-bysort PANID year month: gen id1 = _n
-drop if id1 !=1
-drop id1
+	bysort PANID year month: egen hhmtrips = sum(hh_trips)
+	bysort PANID year month: egen hhmpur   = sum(hh_wpur)
+	bysort PANID year month: gen id1 = _n
+	drop if id1 !=1
+	drop id1
 
-gen yrmonth = ym(year, month) 
-format yrmonth %tm 
+	gen yrmonth = ym(year, month) 
+	format yrmonth %tm 
 
-gen recession = (yrmonth >=ym(2007, 1) & yrmonth < ym(2009,7))
-drop if missing(familysize)
-gen more_four = familysize >3
-gen share_pur = hhmpur*100/hhmtrips
+	gen recession = (yrmonth >=ym(2007, 1) & yrmonth < ym(2009,7))
+	drop if missing(familysize)
+	gen more_four = familysize >3
+	gen share_pur = hhmpur*100/hhmtrips
 
-gen log_hhmpur = log(hhmpur)
-gen log_hv = log(hv_)
-gen log_share = log(share_pur)
+	gen log_hhmpur = log(hhmpur)
+	gen log_hv = log(hv_)
+	gen log_share = log(share_pur)
 
-local controls "i.combinedpretaxincomeofhh less_54_m less_54_w more_55_m more_55_w hsgrad_m hsgrad_w some_coll_m some_coll_w collgrad_m collgrad_w postgrad_m postgrad_w mana_admin_m sales_m cler_m crafts_m oper_m laborer_m serv_priv_m other_prof_m mana_admin_w sales_w cler_w crafts_w oper_w laborer_w serv_priv_w other_prof_w more_four renter other_resid married widowed div_sep"
+	local controls "i.combinedpretaxincomeofhh less_54_m less_54_w more_55_m more_55_w hsgrad_m hsgrad_w some_coll_m some_coll_w collgrad_m collgrad_w postgrad_m postgrad_w mana_admin_m sales_m cler_m crafts_m oper_m laborer_m serv_priv_m other_prof_m mana_admin_w sales_w cler_w crafts_w oper_w laborer_w serv_priv_w other_prof_w more_four renter other_resid married widowed div_sep"
 
-cap encode city, gen(city1)
-cap encode statename, gen (state1)
+	cap encode city, gen(city1)
+	cap encode statename, gen (state1)
 
-local fixed_effects "i.month i.state1##i.year"
+	local fixed_effects "i.month i.state1##i.year"
 
-reg log_share top_third bottom_third log_hv `controls' `fixed_effects', r
-outreg2 using first_trips, append 
+	reg log_share top_third bottom_third log_hv `controls' `fixed_effects', r
+	outreg2 using first_trips, append 
 }
-
-
 
 *****************************************************************************
 *Second Analysis***Effects of Work Status on Consumption between 2008 - 2012*
@@ -1170,35 +1120,35 @@ local controls "i.combinedpretaxincomeofhh less_54_m less_54_w more_55_m more_55
 global files coldcer yogurt fzpizza saltsnck soup spagsauc fzdinent hotdog 
 
 use $dataout/FinalProject/coldcerhvf.dta, clear
-	drop if missing(familysize)
-	gen more_four = familysize >3
+drop if missing(familysize)
+gen more_four = familysize >3
 	
-	gen recession = (Calendarweekendingon>=mdy(12,1,2007) & Calendarweekendingon<mdy(7,1,2009))
+gen recession = (Calendarweekendingon>=mdy(12,1,2007) & Calendarweekendingon<mdy(7,1,2009))
 	
-	bysort PANID year month: egen hhmpur = sum(DOLLARS)
-	bysort PANID year month: gen id1 = _n 
-	drop if id1 != 1
+bysort PANID year month: egen hhmpur = sum(DOLLARS)
+bysort PANID year month: gen id1 = _n 
+drop if id1 != 1
 	
-	bysort PANID (year month): gen time_trend = _n
-	gen time_trend_sq = time_trend^2
+bysort PANID (year month): gen time_trend = _n
+gen time_trend_sq = time_trend^2
 	
-	gen log_hhmpur = log(hhmpur)
-	gen log_hv = log(hv_)
+gen log_hhmpur = log(hhmpur)
+gen log_hv = log(hv_)
 	
-	cap encode city, gen(city1)
-	cap encode statename, gen (state1)
-	local fixed_effects "i.state1##i.year i.month"
+cap encode city, gen(city1)
+cap encode statename, gen (state1)
+local fixed_effects "i.state1##i.year i.month"
 	
-	cd $output/FinalProject
+cd $output/FinalProject
 	
-	reg log_hhmpur log_hv less_ft_w  less_ft_m home_stu_w home_stu_m no_hh_w no_hh_m unemp_w unemp_m `controls' `fixed_effects', r
-	est store coldcer
-	outreg2 using second_basic, replace
+reg log_hhmpur log_hv less_ft_w  less_ft_m home_stu_w home_stu_m no_hh_w no_hh_m unemp_w unemp_m `controls' `fixed_effects', r
+est store coldcer
+outreg2 using second_basic, replace
 
-	reg log_hhmpur log_hv less_ft_w##more_four less_ft_m##more_four home_stu_w##more_four home_stu_m##more_four unemp_w##more_four unemp_m##more_four no_hh_w##more_four no_hh_m##more_four `controls' `fixed_effects', r
-	outreg2 using second_famsize, replace
+reg log_hhmpur log_hv less_ft_w##more_four less_ft_m##more_four home_stu_w##more_four home_stu_m##more_four unemp_w##more_four unemp_m##more_four no_hh_w##more_four no_hh_m##more_four `controls' `fixed_effects', r
+outreg2 using second_famsize, replace
 	
-	/*-------------------*/
+/*-------------------*/
 
 tokenize $files
 
@@ -1255,7 +1205,7 @@ grc1leg hm_w hm_m , ycom name(commbined_hm, replace)
 *****************************************************************************
 
 ********************************************
-***  Polynonimal time-trends			 ***
+***  Polynonimal time-trends		 ***
 ********************************************
 
 local controls "i.combinedpretaxincomeofhh less_54_m less_54_w more_55_m more_55_w hsgrad_m hsgrad_w some_coll_m some_coll_w collgrad_m collgrad_w postgrad_m postgrad_w mana_admin_m sales_m cler_m crafts_m oper_m laborer_m serv_priv_m other_prof_m mana_admin_w sales_w cler_w crafts_w oper_w laborer_w serv_priv_w other_prof_w more_four renter other_resid married widowed div_sep log_hv"
@@ -1398,98 +1348,5 @@ forvalues i=2/8{
 *------------------------------------------------------------------------------*
 
 coefplot (coldcer, label(coldcer)) (yogurt, label(yogurt)) (fzpizza, label(fzpizza)) (saltsnck, label(saltsnck)) (soup, label(soup)) (spagsauc, label(spagsauc)) (fzdinent, label(fzdinent)) (sugarsub, label(sugarsub)) (peanbutr, label(peanbutr)) (mustketc, label(mustketc)) (margbutr, label(margbutr)) (mayo, label(mayo)) (hotdog, label(hotdog)), keep(less_ft_wXrec) drop(_cons) xline(0, lpattern(dash)) legend(pos(3) col(1)) name(rec_less_ft_w, replace) title("Part-time Female Head of Household") xti("Estimated Coeficients") 
-
 coefplot (coldcer, label(coldcer)) (yogurt, label(yogurt)) (fzpizza, label(fzpizza)) (saltsnck, label(saltsnck)) (soup, label(soup)) (spagsauc, label(spagsauc)) (fzdinent, label(fzdinent)) (sugarsub, label(sugarsub)) (peanbutr, label(peanbutr)) (mustketc, label(mustketc)) (margbutr, label(margbutr)) (mayo, label(mayo)) (hotdog, label(hotdog)), keep(less_ft_mXrec) sort drop(_cons) xline(0, lpattern(dash)) legend(pos(3) col(1)) name(rec_less_ft_m, replace) title("Part-time Male Head of Household") xti("Estimated Coeficients")
-
-/*----------------------------------------------------------------------------*/
-/*For years 2004-2007*/
-local controls "i.combinedpretaxincomeofhh i.agegroupappliedtomalehh i.agegroupappliedtofemalehh i.educationlevelreachedbymalehh i.educationlevelreachedbyfemalehh i.occupationcodeofmalehh i.occupationcodeoffemalehh"
-
-local time_effects "i.WEEK"
-
-global file coldcer yogurt fzpizza saltsnck soup spagsauc fzdinent sugarsub peanbutr mustketc margbutr mayo hotdog 
-
-tokenize $file
-
-forvalues i=1/13{
-	use $dataout/FinalProject/``i''.dta, clear
-	drop if missing(familysize)
-	gen parttime_wXfamsize = parttime_w*familysize 
-	gen parttime_mXfamsize = parttime_m*familysize 
-	gen homemaker_wXfamsize = homemaker_w*familysize 
-	gen homemaker_mXfamsize = homemaker_m*familysize 
-	gen not_employed_wXfamsize = not_employed_w*familysize 
-	gen not_employed_mXfamsize = not_employed_m*familysize 
-	gen retired_wXfamsize = retired_w*familysize 
-	gen retired_mXfamsize = retired_m*familysize 
-	gen student_wXfamsize = student_w*familysize 
-	gen student_mXfamsize = student_m*familysize 
-	
-	gen log_hhpur = log(hh_pur)
-	reg log_hhpur parttime_w parttime_wXfamsize parttime_m parttime_mXfamsize homemaker_w homemaker_wXfamsize homemaker_m homemaker_mXfamsize not_employed_w not_employed_wXfamsize not_employed_m not_employed_mXfamsize retired_w retired_wXfamsize retired_m retired_mXfamsize student_w student_wXfamsize student_m student_mXfamsize `controls' `time_effects', r
-	est store ``i''
-}
-
-
-
-/*----------------------------------------------------------------------------*/
-/*For years 2004-2012*/
-
-local controls "i.combinedpretaxincomeofhh i.agegroupappliedtomalehh i.agegroupappliedtofemalehh i.educationlevelreachedbymalehh i.educationlevelreachedbyfemalehh i.occupationcodeofmalehh i.occupationcodeoffemalehh"
-
-local time_effects "i.WEEK"
-
-global file coldcer yogurt fzpizza saltsnck soup spagsauc fzdinent sugarsub peanbutr mustketc margbutr mayo hotdog 
-
-tokenize $file
-
-forvalues i=1/13{
-	use $dataout/FinalProject/``i''.dta, clear
-	drop if missing(familysize)
-	gen parttime_wXfamsize = parttime_w*familysize 
-	gen parttime_mXfamsize = parttime_m*familysize 
-	gen homemaker_wXfamsize = homemaker_w*familysize 
-	gen homemaker_mXfamsize = homemaker_m*familysize 
-	gen not_employed_wXfamsize = not_employed_w*familysize 
-	gen not_employed_mXfamsize = not_employed_m*familysize 
-	gen retired_wXfamsize = retired_w*familysize 
-	gen retired_mXfamsize = retired_m*familysize 
-	gen student_wXfamsize = student_w*familysize 
-	gen student_mXfamsize = student_m*familysize 
-	
-	gen recession = end_year == 2008 | end_year == 2009
-	gen interacted_recession_w = parttime_w*recession
-	gen interacted_recession_m = parttime_m*recession
-	gen log_hhpur = log(hh_pur)
-	reg log_hhpur parttime_w parttime_wXfamsize parttime_m parttime_mXfamsize homemaker_w homemaker_wXfamsize homemaker_m homemaker_mXfamsize not_employed_w not_employed_wXfamsize not_employed_m not_employed_mXfamsize retired_w retired_wXfamsize retired_m retired_mXfamsize student_w student_wXfamsize student_m student_mXfamsize recession interacted_recession_w interacted_recession_m  `controls' `time_effects', r
-	est store ``i''
-}
-
-set scheme s2manual 
-
-/*Part-time*/
-coefplot (coldcer, label(coldcer)) (yogurt, label(yogurt)) (fzpizza, label(fzpizza)) (saltsnck, label(saltsnck)) (soup, label(soup)) (spagsauc, label(spagsauc)) (fzdinent, label(fzdinent)) (sugarsub, label(sugarsub)) (peanbutr, label(peanbutr)) (mustketc, label(mustketc)) (margbutr, label(margbutr)) (mayo, label(mayo)) (hotdog, label(hotdog)), keep(parttime_w) drop(_cons) xline(0, lpattern(dash)) legend(pos(3) col(1)) name(parttime_w, replace) title("Part-time Female Head of Household") xti("Estimated Coeficients") 
-
-coefplot (coldcer, label(coldcer)) (yogurt, label(yogurt)) (fzpizza, label(fzpizza)) (saltsnck, label(saltsnck)) (soup, label(soup)) (spagsauc, label(spagsauc)) (fzdinent, label(fzdinent)) (sugarsub, label(sugarsub)) (peanbutr, label(peanbutr)) (mustketc, label(mustketc)) (margbutr, label(margbutr)) (mayo, label(mayo)) (hotdog, label(hotdog)), keep(parttime_m) sort drop(_cons) xline(0, lpattern(dash)) legend(pos(3) col(1)) name(parttime_m, replace) title("Part-time Male Head of Household") xti("Estimated Coeficients")
-
-/*Homemaker*/
-coefplot (coldcer, label(coldcer)) (yogurt, label(yogurt)) (fzpizza, label(fzpizza)) (saltsnck, label(saltsnck)) (soup, label(soup)) (spagsauc, label(spagsauc)) (fzdinent, label(fzdinent)) (sugarsub, label(sugarsub)) (peanbutr, label(peanbutr)) (mustketc, label(mustketc)) (margbutr, label(margbutr)) (mayo, label(mayo)) (hotdog, label(hotdog)), keep(homemaker_w) drop(_cons) xline(0, lpattern(dash)) legend(pos(3) col(1)) name(homemaker_w, replace) title("Homemaker Female Head of Household") xti("Estimated Coeficients") 
-
-coefplot (coldcer, label(coldcer)) (yogurt, label(yogurt)) (fzpizza, label(fzpizza)) (saltsnck, label(saltsnck)) (soup, label(soup)) (spagsauc, label(spagsauc)) (fzdinent, label(fzdinent)) (sugarsub, label(sugarsub)) (peanbutr, label(peanbutr)) (mustketc, label(mustketc)) (margbutr, label(margbutr)) (mayo, label(mayo)) (hotdog, label(hotdog)), keep(homemaker_m) sort drop(_cons) xline(0, lpattern(dash)) legend(pos(3) col(1)) name(homemaker_m, replace) title("Homemaker Male Head of Household") xti("Estimated Coeficients")
-
-/*Unemployed*/
-coefplot (coldcer, label(coldcer)) (yogurt, label(yogurt)) (fzpizza, label(fzpizza)) (saltsnck, label(saltsnck)) (soup, label(soup)) (spagsauc, label(spagsauc)) (fzdinent, label(fzdinent)) (sugarsub, label(sugarsub)) (peanbutr, label(peanbutr)) (mustketc, label(mustketc)) (margbutr, label(margbutr)) (mayo, label(mayo)) (hotdog, label(hotdog)), keep(not_employed_w) drop(_cons) xline(0, lpattern(dash)) legend(pos(3) col(1)) name(not_employed_w, replace) title("Unemployed Female Head of Household") xti("Estimated Coeficients") 
-
-coefplot (coldcer, label(coldcer)) (yogurt, label(yogurt)) (fzpizza, label(fzpizza)) (saltsnck, label(saltsnck)) (soup, label(soup)) (spagsauc, label(spagsauc)) (fzdinent, label(fzdinent)) (sugarsub, label(sugarsub)) (peanbutr, label(peanbutr)) (mustketc, label(mustketc)) (margbutr, label(margbutr)) (mayo, label(mayo)) (hotdog, label(hotdog)), keep(not_employed_m) sort drop(_cons) xline(0, lpattern(dash)) legend(pos(3) col(1)) name(not_employed_m, replace) title("Unemployed Male Head of Household") xti("Estimated Coeficients")
-
-/*Retired*/
-coefplot (coldcer, label(coldcer)) (yogurt, label(yogurt)) (fzpizza, label(fzpizza)) (saltsnck, label(saltsnck)) (soup, label(soup)) (spagsauc, label(spagsauc)) (fzdinent, label(fzdinent)) (sugarsub, label(sugarsub)) (peanbutr, label(peanbutr)) (mustketc, label(mustketc)) (margbutr, label(margbutr)) (mayo, label(mayo)) (hotdog, label(hotdog)), keep(retired_w) drop(_cons) xline(0, lpattern(dash)) legend(pos(3) col(1)) name(retired_w, replace) title("Retired Female Head of Household") xti("Estimated Coeficients") 
-
-coefplot (coldcer, label(coldcer)) (yogurt, label(yogurt)) (fzpizza, label(fzpizza)) (saltsnck, label(saltsnck)) (soup, label(soup)) (spagsauc, label(spagsauc)) (fzdinent, label(fzdinent)) (sugarsub, label(sugarsub)) (peanbutr, label(peanbutr)) (mustketc, label(mustketc)) (margbutr, label(margbutr)) (mayo, label(mayo)) (hotdog, label(hotdog)), keep(retired_m) sort drop(_cons) xline(0, lpattern(dash)) legend(pos(3) col(1)) name(retired_m, replace) title("Retired Male Head of Household") xti("Estimated Coeficients")
-
-local controls "i.combinedpretaxincomeofhh i.agegroupappliedtomalehh i.agegroupappliedtofemalehh i.educationlevelreachedbymalehh i.educationlevelreachedbyfemalehh i.occupationcodeofmalehh i.occupationcodeoffemalehh"
-
-
-
-
 
