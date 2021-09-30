@@ -14,10 +14,13 @@ global mainpath "/Users/tvnguyen/Desktop/Predoc_Summercourse/"
 /*I already have DATAIN, DATAOUT, and OUPUT on my computer. You might need to create those folders*/
 
 global datain "$mainpath/DATAIN"
+capture mkdir "$datain/FinalProject"
 
 global dataout "$mainpath/DATAOUT"
+capture mkdir  "$dataout/FinalProject"
 
 global output "$mainpath/OUTPUT"
+capture mkdir "$output/FinalProject"
 
 
 global files coldcer yogurt fzpizza saltsnck soup spagsauc fzdinent sugarsub peanbutr mustketc margbutr mayo hotdog 

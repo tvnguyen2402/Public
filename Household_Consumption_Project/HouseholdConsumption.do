@@ -621,9 +621,9 @@ varirf table oirf, impulse(spfshock1) response(ln_tot_consumption) std
 irf graph oirf, impulse(spfshock1) response(ln_tot_consumption) level(68)
 graph rename fifth_consumption_fed, replace
 
-**********************************************************************
-** Effects of Government Tax Policy Shocks on Household Consumption **
-**********************************************************************
+*******************************************************************************
+** Effects of Government Tax Policy Shocks on Household Consumer Expenditure **
+*******************************************************************************
 
 *---------------------------------------------------
 use $dataout/1_quintile.dta , clear
@@ -699,7 +699,7 @@ irf graph oirf, impulse(romershock1) response(ln_tot_consumption) level(68)
 graph rename fifth_consumption_romer
 
 **********************************************************
-** Effects of Tax Polic Shocks on Work Hours **
+** Effects of Tax Polic Shocks on Work Hours            **
 **********************************************************
 
 *-------------------------------------------------------------------------------*

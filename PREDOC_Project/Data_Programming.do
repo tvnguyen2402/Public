@@ -93,16 +93,16 @@ save $datain/FinalProject/appended_``i''_PANEL_`weeks`k''.dta, replace
 *************************************
 
 forvalues k=4(1)7{
-import delimited $rawdata/Demo/demo`k'.csv, clear
-rename panelistid PANID
-rename year YEAR
+	import delimited $rawdata/Demo/demo`k'.csv, clear
+	rename panelistid PANID
+	rename year YEAR
 save $datain/FinalProject/DEMOS_`k'.dta, replace
 }
 
 forvalues k=8(1)12{
-import delimited $rawdata/Demo/demo`k'.csv, clear
-rename panelistid PANID
-gen YEAR = `k'
+	import delimited $rawdata/Demo/demo`k'.csv, clear
+	rename panelistid PANID
+	gen YEAR = `k'
 save $datain/FinalProject/DEMOS_`k'.dta, replace
 }
 
@@ -324,7 +324,7 @@ forvalues k=4(1)7 {
 		
 		cd "$dataout/FinalProject"
 
-		save ``i''_`k', replace
+		save $dataout/FinalProject/``i''_`k', replace
 	}
 }
 ****************************************************************************
