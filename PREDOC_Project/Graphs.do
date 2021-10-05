@@ -25,9 +25,9 @@ capture mkdir "$output/FinalProject"
 
 global files coldcer yogurt fzpizza saltsnck soup spagsauc fzdinent sugarsub peanbutr mustketc margbutr mayo hotdog 
 
-*************************************
-*** Graphs for Motivation Section ***			
-*************************************
+***********************************************
+*** Graphs for Descriptive Analysis Section ***			
+***********************************************
 
 set scheme s2mono
 

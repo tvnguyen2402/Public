@@ -180,12 +180,7 @@ forvalues i=2/8{
 	gen log_hv = log(hv_)
 	gen log_share = log(share_pur*)
 
-	local controls "i.combinedpretaxincomeofhh \
-less_54_m less_54_w more_55_m more_55_w \
-hsgrad_m hsgrad_w some_coll_m some_coll_w collgrad_m collgrad_w postgrad_m postgrad_w \
-mana_admin_m sales_m cler_m crafts_m oper_m laborer_m serv_priv_m other_prof_m \
-mana_admin_w sales_w cler_w crafts_w oper_w laborer_w serv_priv_w other_prof_w \
-renter other_resid married widowed div_sep "
+	local controls "i.combinedpretaxincomeofhh less_54_m less_54_w more_55_m more_55_w hsgrad_m hsgrad_w some_coll_m some_coll_w collgrad_m collgrad_w postgrad_m postgrad_w mana_admin_m sales_m cler_m crafts_m oper_m laborer_m serv_priv_m other_prof_m mana_admin_w sales_w cler_w crafts_w oper_w laborer_w serv_priv_w other_prof_w renter other_resid married widowed div_sep "
 
 	cap encode statename, gen (state1)
 
@@ -207,12 +202,7 @@ outreg2 using first_trips, append
 *** Non Parametric Time Trend -- Time-fixed Effects  ***
 ********************************************************
 
-local controls "i.combinedpretaxincomeofhh \
-less_54_m less_54_w more_55_m more_55_w \
-hsgrad_m hsgrad_w some_coll_m some_coll_w collgrad_m collgrad_w postgrad_m postgrad_w \
-mana_admin_m sales_m cler_m crafts_m oper_m laborer_m serv_priv_m other_prof_m \
-mana_admin_w sales_w cler_w crafts_w oper_w laborer_w serv_priv_w other_prof_w \
-renter other_resid married widowed div_sep "
+local controls "i.combinedpretaxincomeofhh less_54_m less_54_w more_55_m more_55_w hsgrad_m hsgrad_w some_coll_m some_coll_w collgrad_m collgrad_w postgrad_m postgrad_w mana_admin_m sales_m cler_m crafts_m oper_m laborer_m serv_priv_m other_prof_m mana_admin_w sales_w cler_w crafts_w oper_w laborer_w serv_priv_w other_prof_w renter other_resid married widowed div_sep "
 
 global files coldcer yogurt fzpizza saltsnck soup fzdinent hotdog 
 
@@ -284,15 +274,10 @@ grc1leg hm_w hm_m , ycom name(commbined_hm, replace)
 *****************************************************************************
 
 ********************************************
-***  Polynonimal time-trends			 ***
+***  Heterogeneity: Income				 ***
 ********************************************
 
-local controls "i.combinedpretaxincomeofhh \
-less_54_m less_54_w more_55_m more_55_w \
-hsgrad_m hsgrad_w some_coll_m some_coll_w collgrad_m collgrad_w postgrad_m postgrad_w \
-mana_admin_m sales_m cler_m crafts_m oper_m laborer_m serv_priv_m other_prof_m \
-mana_admin_w sales_w cler_w crafts_w oper_w laborer_w serv_priv_w other_prof_w \
-renter other_resid married widowed div_sep "
+local controls "i.combinedpretaxincomeofhh less_54_m less_54_w more_55_m more_55_w hsgrad_m hsgrad_w some_coll_m some_coll_w collgrad_m collgrad_w postgrad_m postgrad_w mana_admin_m sales_m cler_m crafts_m oper_m laborer_m serv_priv_m other_prof_m mana_admin_w sales_w cler_w crafts_w oper_w laborer_w serv_priv_w other_prof_w renter other_resid married widowed div_sep "
 
 global files coldcer yogurt fzpizza saltsnck soup fzdinent hotdog 
 
@@ -315,9 +300,9 @@ use $dataout/FinalProject/coldcerhvf.dta, clear
 	local fixed_effects "i.state1"
 	cd $output/FinalProject
 
-	reg log_hhmpur less_ft_w##i.recession i.less_ft_m##i.recession i.home_stu_w##i.recession i.home_stu_m##i.recession unemp_w##i.recession unemp_m##i.recession no_hh_w##i.recession no_hh_m##i.recession time_trend time_trend_sq time_trend_cb `controls' `fixed_effects', r
+	reg log_hhmpur i.top_third##i.recession i.bottom_third##i.recession log_hv time_trend time_trend_sq time_trend_cb `controls' `fixed_effects', r
 
-	outreg2 using cyclicality_1, replace
+	outreg2 using cyclicality_inc, replace
 
 *----*
 
@@ -343,33 +328,24 @@ forvalues i=2/8{
 	local fixed_effects "i.state1"
 	cd $output/FinalProject
 
-	reg log_hhmpur less_ft_w##i.recession i.less_ft_m##i.recession i.home_stu_w##i.recession i.home_stu_m##i.recession unemp_w##i.recession unemp_m##i.recession no_hh_w##i.recession no_hh_m##i.recession time_trend time_trend_sq time_trend_cb `controls' `fixed_effects', r
+	reg log_hhmpur i.top_third##i.recession i.bottom_third##i.recession log_hv time_trend time_trend_sq time_trend_cb `controls' `fixed_effects', r
 	
-	outreg2 using cyclicality_1, append
+	outreg2 using cyclicality_inc, append
 }
 
+
 ********************************************
-***  Linear time-trends		 			 ***
+***  Heterogeneity: Work Statuses		 ***
 ********************************************
 
-local controls "i.combinedpretaxincomeofhh \
-less_54_m less_54_w more_55_m more_55_w \
-hsgrad_m hsgrad_w some_coll_m some_coll_w collgrad_m collgrad_w postgrad_m postgrad_w \
-mana_admin_m sales_m cler_m crafts_m oper_m laborer_m serv_priv_m other_prof_m \
-mana_admin_w sales_w cler_w crafts_w oper_w laborer_w serv_priv_w other_prof_w \
-renter other_resid married widowed div_sep "
+local controls "i.combinedpretaxincomeofhh less_54_m less_54_w more_55_m more_55_w hsgrad_m hsgrad_w some_coll_m some_coll_w collgrad_m collgrad_w postgrad_m postgrad_w mana_admin_m sales_m cler_m crafts_m oper_m laborer_m serv_priv_m other_prof_m mana_admin_w sales_w cler_w crafts_w oper_w laborer_w serv_priv_w other_prof_w renter other_resid married widowed div_sep "
 
 global files coldcer yogurt fzpizza saltsnck soup fzdinent hotdog 
 
 use $dataout/FinalProject/coldcerhvf.dta, clear
-
-	drop if missing(familysize)
 	
 	bysort PANID year month: egen hhmpur = sum(DOLLARS)
-	gen recession 		= 	(Calendarweekendingon>=mdy(12,1,2007) & Calendarweekendingon<mdy(7,1,2009))
-	gen pre_recession 	=	(Calendarweekendingon<mdy(12,1,2007))
-	gen post_recession	= 	(Calendarweekendingon>mdy(7,1,2009))
-	
+	gen recession = (Calendarweekendingon>=mdy(12,1,2007) & Calendarweekendingon<mdy(7,1,2009))
 	bysort PANID year month: gen id1 = _n 
 	drop if id1 != 1
 	
@@ -377,27 +353,19 @@ use $dataout/FinalProject/coldcerhvf.dta, clear
 	gen log_hv = log(hv_)
 
 	bysort PANID (year month): gen time_trend = _n
+	gen time_trend_sq = time_trend^2
+	gen time_trend_cb = time_trend^3
 
 	cap encode statename, gen (state1)
 
 	local fixed_effects "i.state1"
 	cd $output/FinalProject
 
-	reg log_hhmpur log_hv less_ft_w less_ft_m home_stu_w home_stu_m unemp_w unemp_m no_hh_w no_hh_m c.time_trend##pre_recession c.time_trend##post_recession `controls' `fixed_effects', r
+	reg log_hhmpur i.less_ft_w##i.recession i.less_ft_m##i.recession home_stu_w##i.recession home_stu_m##i.recession log_hv unemp_w unemp_m no_hh_w no_hh_m time_trend time_trend_sq `controls' `fixed_effects', r
 
-	outreg2 using cyclicality_2, replace
+	outreg2 using cyclicality_work, replace
 
 *----*
-
-local controls "i.combinedpretaxincomeofhh \
-less_54_m less_54_w more_55_m more_55_w \
-hsgrad_m hsgrad_w some_coll_m some_coll_w collgrad_m collgrad_w postgrad_m postgrad_w \
-mana_admin_m sales_m cler_m crafts_m oper_m laborer_m serv_priv_m other_prof_m \
-mana_admin_w sales_w cler_w crafts_w oper_w laborer_w serv_priv_w other_prof_w \
-renter other_resid married widowed div_sep "
-
-global files coldcer yogurt fzpizza saltsnck soup spagsauc fzdinent hotdog 
-
 
 tokenize $files
 
@@ -405,10 +373,7 @@ forvalues i=2/8{
 	use $dataout/FinalProject/``i''hvf.dta, clear
 	
 	bysort PANID year month: egen hhmpur = sum(DOLLARS)
-	gen recession 		= 	(Calendarweekendingon>=mdy(12,1,2007) & Calendarweekendingon<mdy(7,1,2009))
-	gen pre_recession 	=	(Calendarweekendingon<mdy(12,1,2007))
-	gen post_recession	= 	(Calendarweekendingon>mdy(7,1,2009))
-	
+	gen recession = (Calendarweekendingon>=mdy(12,1,2007) & Calendarweekendingon<mdy(7,1,2009))
 	bysort PANID year month: gen id1 = _n 
 	drop if id1 != 1
 	
@@ -416,14 +381,101 @@ forvalues i=2/8{
 	gen log_hv = log(hv_)
 
 	bysort PANID (year month): gen time_trend = _n
+	gen time_trend_sq = time_trend^2
+	gen time_trend_cb = time_trend^3
 
 	cap encode statename, gen (state1)
 
 	local fixed_effects "i.state1"
 	cd $output/FinalProject
-	reg log_hhmpur log_hv less_ft_w less_ft_m home_stu_w home_stu_m unemp_w unemp_m no_hh_w no_hh_m c.time_trend##pre_recession c.time_trend##post_recession `controls' `fixed_effects', r
-		
-	outreg2 using cyclicality_2, append
+
+	reg log_hhmpur i.less_ft_w##i.recession i.less_ft_m##i.recession home_stu_w##i.recession home_stu_m##i.recession log_hv unemp_w unemp_m no_hh_w no_hh_m time_trend time_trend_sq `controls' `fixed_effects', r
+	
+	outreg2 using cyclicality_work, append
+}
+
+*********************************************
+***  Heterogeneity: Work Statuses - Trips ***
+*********************************************
+
+local controls "i.combinedpretaxincomeofhh less_54_m less_54_w more_55_m more_55_w hsgrad_m hsgrad_w some_coll_m some_coll_w collgrad_m collgrad_w postgrad_m postgrad_w mana_admin_m sales_m cler_m crafts_m oper_m laborer_m serv_priv_m other_prof_m mana_admin_w sales_w cler_w crafts_w oper_w laborer_w serv_priv_w other_prof_w renter other_resid married widowed div_sep "
+
+global files coldcer yogurt fzpizza saltsnck soup fzdinent hotdog 
+
+use $dataout/FinalProject/filtered_panel_trips_coldcer.dta, clear
+
+bysort PANID year month: egen hhmtrips = sum(hh_trips)
+bysort PANID year month: egen hhmpur   = sum(hh_wpur)
+bysort PANID year month: gen id1 = _n
+drop if id1 !=1
+drop id1
+
+gen yrmonth = ym(year, month) 
+format yrmonth %tm 
+
+gen recession = (yrmonth >=ym(2007, 12) & yrmonth < ym(2009,7))
+gen share_pur = hhmpur*100*100/hhmtrips
+gen log_hhmpur = log(hhmpur)
+gen log_hhmtrips = log(hhmtrips)
+gen log_hv = log(hv_)
+
+bysort PANID (year month): gen time_trend = _n
+gen time_trend_sq = time_trend^2
+gen time_trend_cb = time_trend^3
+
+cap encode statename, gen (state1)
+
+local fixed_effects "i.state1"
+cd $output/FinalProject
+
+reg share_pur i.less_ft_w##i.recession i.less_ft_m##i.recession home_stu_w##i.recession home_stu_m##i.recession log_hv unemp_w unemp_m no_hh_w no_hh_m time_trend time_trend_sq `controls' `fixed_effects', r
+
+outreg2 using cyclicality_work_trips, replace
+
+*----*
+
+tokenize $files
+
+forvalues i=2/8{
+	use $dataout/FinalProject/filtered_panel_trips_``i''.dta, clear
+	
+	bysort PANID year month: egen hhmtrips = sum(hh_trips)
+	bysort PANID year month: egen hhmpur   = sum(hh_wpur)
+	bysort PANID year month: gen id1 = _n
+	drop if id1 !=1
+	drop id1
+
+	gen yrmonth = ym(year, month) 
+	format yrmonth %tm 
+
+	gen recession = (yrmonth >=ym(2007, 12) & yrmonth < ym(2009,7))
+	gen share_pur = hhmpur*100*100/hhmtrips
+	gen log_hhmpur = log(hhmpur)
+	gen log_hhmtrips = log(hhmtrips)
+	gen log_hv = log(hv_)
+
+	bysort PANID (year month): gen time_trend = _n
+	gen time_trend_sq = time_trend^2
+	gen time_trend_cb = time_trend^3
+
+	cap encode statename, gen (state1)
+
+	local fixed_effects "i.state1"
+	cd $output/FinalProject
+
+	reg share_pur i.less_ft_w##i.recession i.less_ft_m##i.recession home_stu_w##i.recession home_stu_m##i.recession log_hv unemp_w unemp_m no_hh_w no_hh_m time_trend time_trend_sq `controls' `fixed_effects', r
+
+	outreg2 using cyclicality_work_trips, append
 }
 
 
+	tw (scatter share_pur yrmonth if fulltime_m == 1, msize(small) mcolor(green%30) msymbol(R) xline(575, lcolor(red%50))) ///
+	(fpfit share_pur yrmonth if fulltime_m == 1, lcolor(green%80)) ///
+	(scatter share_pur yrmonth if less_ft_m == 1, msize(small) mcolor(blue%30) msymbol(R) xline(595, lcolor(red%50))) ///
+	(fpfit share_pur yrmonth if less_ft_m == 1, lcolor(blue%80)) ///
+	(scatter share_pur yrmonth if home_stu_m == 1, msize(small) mcolor(red%30) msymbol(R)) ///
+	(fpfit share_pur yrmonth if home_stu_m == 1, lcolor(red%80)), ///
+	ti("Household Monthly Average Expenditure by Work Status", size(large)) ///
+	subtitle("Male Head 2004 - 2012", size(medium)) legend(pos(5) ring(0) size(small) col(1) order(1 "Full-time" 3 "Part-time" 5 "Homemaker")) ///
+	xti("Month Year") yti("U.S Dollars $") note("Source: IRI Academic Data",pos(7)) ///
+	name(exp_by_work_m``i'', replace)
