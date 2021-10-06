@@ -39,9 +39,9 @@ reg l_rpinc t t2 t3, r
 predict fitted_l_rpinc
 
 
-******************************************************************************
-*Creating lags, first difference, time horizons, and cummulative growth rates*
-******************************************************************************
+*******************************************************************
+*Creating lags, first difference, difference over h time horizons *
+*******************************************************************
 
 *Generating time horizons for gdp*
 forvalues i=1(1)20 {
@@ -103,10 +103,10 @@ forvalues i=1(1)20 {
 gen fedfunds_l1 = L1.fedfunds
 gen d1_fedfunds_l1 = fedfunds - fedfunds_l1 
 
-*monetary shocks*
+*Romer&Romer 2004 Monetary Shocks*
 gen rr_monetary_l1= L1.rr_monetary
 
-*add tax policy*
+*Romer&Romer 2010 Tax Policy Shocks*
 gen rr_endo_l1 =L1.rr_endo
 gen rr_exo_l1=L1.rr_exo 
 
